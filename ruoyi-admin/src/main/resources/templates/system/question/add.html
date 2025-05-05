@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增题目')" />
+    <th:block th:include="include :: ztree-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-question-add">
+            <!--问题分区-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label is-required">问题分区：</label>
+                        <div class="col-sm-8">
+                            <select name="questionPartition" id="questionPartition" class="form-control m-b" th:with="type=${@dict.getType('sys_question_partition')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--问题类型-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label is-required">问题类型：</label>
+                        <div class="col-sm-8">
+                            <select name="questionType" id="questionType" class="form-control m-b" th:with="type=${@dict.getType('sys_question_type')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--问题标题-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">问题标题：</label>
+                        <div class="col-sm-8">
+                            <textarea type="text" name="questionTitle" class="form-control" style="resize: none;height: 10em;" placeholder="请输入问题"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--问题解析-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">答案解析：</label>
+                        <div class="col-sm-8">
+                            <textarea type="text" name="questionAnalysis" class="form-control" style="resize: none;height: 10em;" placeholder="请输入答案解析"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--备注-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注：</label>
+                        <div class="col-sm-8">
+                            <textarea type="text" name="bank" class="form-control" style="resize: none;height: 10em;" placeholder="请输入答案解析"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: ztree-js" />
+    <script>
+        var prefix = ctx + "system/question";
+
+        //$("#questionType option:selected").text();
+        //获取下拉框选中选项的text的值
+        var addQuestionPartition = $("#questionPartition option:selected").text();
+        var addQuestionType = $("#questionType option:selected").text();
+
+
+
+        $("#form-question-add").validate({
+
+        });
+
+        function submitHandler() {
+            console.log();
+        }
+    </script>
+</body>
+</html>

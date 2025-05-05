@@ -15,7 +15,7 @@ function login() {
     var rememberMe = $("input[name='rememberme']").is(':checked');
     if($.common.isEmpty(validateCode) && captchaEnabled) {
         $.modal.msg("请输入验证码");
-        return false;
+        return true;
     }
     $.ajax({
         type: "post",

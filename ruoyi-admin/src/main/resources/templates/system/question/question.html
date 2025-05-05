@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('题库列表')" />
+</head>
+<body class="gray-bg">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="questiono-from">
+                    <div class="select-list">
+                        <ul>
+
+                            <li>
+                                    题目类型：<select name="questionType" th:with="type=${@dict.getType('sys_question_type')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                问题名称：<input type="text" name="questionTitle"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:question:add">
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:question:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:question:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:question:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+
+    <script th:inline="javascript">
+
+        var editFlag = [[${@permission.hasPermi('system:question:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:question:remove')}]];
+        var prefix = ctx + "system/question";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/export",
+                editUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                createUrl: prefix + "/add",
+                modalName: "题目",
+                columns : [{
+                        checkbox: true,
+                    },
+                    {
+                        field: 'questionId',
+                        title:'题目编号',
+                    },
+                    {
+                        field: 'questionTitle',
+                        title:'题目标题',
+                    },
+                    {
+                        field: 'questionType',
+                        title: '题目类型',
+                    },
+                    {
+                        field: 'questionAnswerList',
+                        title: '答案列表',
+                        formatter: function(value, item, index) {
+                            value = '';
+                            for (var i = 0; i < item.questionAnswerList.length; i++) {
+                                value += item.questionAnswerList[i].content;
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field: 'questionAnswer',
+                        title: '正确答案',
+                        formatter: function(value, item, index) {
+                            value = '';
+                            for (var i = 0; i < item.questionAnswer.length; i++) {
+                                value += item.questionAnswer[i].content;
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field: 'questionAnalysis',
+                        title: '问题解析',
+                    }]
+            };
+            $.table.init(options);
+        });
+
+    </script>
+</body>
+</html>
